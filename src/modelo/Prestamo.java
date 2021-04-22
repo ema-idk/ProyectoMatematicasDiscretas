@@ -43,4 +43,10 @@ public class Prestamo {
     public double getImporte() {
         return importe;
     }
+
+    @Override
+    public String toString() {
+        return "Prestamo{" + "noPrestamo=" + noPrestamo + ", nombre=" + nombre + ", direccion=" + direccion + ", noTelefono=" + noTelefono + ", importe=" + importe + '}';
+    }
+    
 }
