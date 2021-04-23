@@ -14,21 +14,21 @@ import java.util.InputMismatchException;
  * @author Canela
  */
 public class Funcion {
-    /*private ArrayList<Articulo> articulos;
+    private ArrayList<Prestamo> prestamos;
     
     public Funcion(){
-        articulos = new ArrayList<Articulo>();
+        prestamos = new ArrayList<Prestamo>();
     }
     
-    private boolean existeCodigo(int codigo){
+    private boolean existeNoPrestamo(int noPrestamo){
         boolean ban = false;
-        for(int i = 0; i < articulos.size(); i++){
-            if(articulos.get(i).getCodigo() == codigo)
+        for(int i = 0; i < prestamos.size(); i++){
+            if(prestamos.get(i).getNoPrestamo() == noPrestamo)
                 ban = true;
         }
         return ban;
     }
-    
+    /*
     public void registrarArticulo(){
         Scanner leerString = new Scanner(System.in);
         Scanner leerInt = new Scanner(System.in);
