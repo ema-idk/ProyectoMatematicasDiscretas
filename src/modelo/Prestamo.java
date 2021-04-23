@@ -46,7 +46,7 @@ public class Prestamo {
 
     @Override
     public String toString() {
-        return "Prestamo{" + "noPrestamo=" + noPrestamo + ", nombre=" + nombre + ", direccion=" + direccion + ", noTelefono=" + noTelefono + ", importe=" + importe + '}';
+        return "Numero de prestamo: " + noPrestamo + "\nNombre del cliente: " + nombre + "\nDireccion: " + direccion + "\nTelefono: " + noTelefono + "\nImporte solicitado: " + importe + '\n';
     }
     
 }
