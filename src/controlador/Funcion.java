@@ -17,50 +17,67 @@ public class Funcion {
     private ArrayList<Prestamo> prestamos;
     
     public Funcion(){
+        //Declaramos un objeto de tipo ArrayList
         prestamos = new ArrayList<Prestamo>();
     }
     
     private boolean existeNoPrestamo(int noPrestamo){
         boolean ban = false;
+        //Realizamos una busqueda por todo el arreglo hasta que encuentre el noPrestamo
         for(int i = 0; i < prestamos.size(); i++){
+            //En caso de encontrarlo, lo marcara como verdadero
             if(prestamos.get(i).getNoPrestamo() == noPrestamo)
                 ban = true;
         }
+        //Retorna al valor que tenga ban, si es falso es que no existe
         return ban;
     }
-    /*
-    public void registrarArticulo(){
+    
+    public void realizarPrestamo(){
+        //Declaro los y objetos y las variables
+        //Para leer cadenas 
         Scanner leerString = new Scanner(System.in);
+        //Para leer enteros
         Scanner leerInt = new Scanner(System.in);
+        //Para leer decimales
         Scanner leerDouble = new Scanner(System.in);
-        int codigo, cantidad;
-        String descripcion;
-        double precio;
+        int noPrestamo;
+        String nombre, direccion, noTelefono;
+        double importe;
+        //Hacemos una iteracion hasta validar que noPrestamo no este registrado 
         do  {
-            System.out.print("Codigo del articulo: ");
-            codigo = leerInt.nextInt();
-        }   while(Funcion.this.existeCodigo(codigo));
-        System.out.print("Descripcion del articulo: ");
-        descripcion = leerString.nextLine();
-        System.out.print("Cantidad en inventario: ");
-        cantidad = leerInt.nextInt();
-        System.out.print("Precio: ");
-        precio = leerDouble.nextDouble();
-        Funcion.this.registrarArticulo(codigo, descripcion, cantidad, precio);
-        System.out.println("Articulo registrado!");
+            System.out.print("Número de préstamo: ");
+            noPrestamo = leerInt.nextInt();
+        }   while(Funcion.this.existeNoPrestamo(noPrestamo));
+        //Introducimos los datos restantes
+        System.out.print("Nombre del cliente: ");
+        nombre = leerString.nextLine();
+        System.out.print("Dirección: ");
+        direccion = leerString.nextLine();
+        System.out.print("Teléfono: ");
+        noTelefono = leerString.nextLine();
+        System.out.print("Importe solicitado: ");
+        importe = leerDouble.nextDouble();
+        //Mandamos llamar la funcion que agrega al ArrayList el prestamo
+        Funcion.this.realizarPrestamo(noPrestamo, nombre, direccion, noTelefono, importe);
+        System.out.println("Préstamo registrado exitosamente!!");
     }
     
-    public void registrarArticulo(int codigo, String descripcion, int cantidad, double precio){
-        articulos.add(new Articulo(codigo, descripcion, cantidad, precio));
-        Object []arreglo = articulos.toArray();
+    public void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, double importe){
+        //Agregamos los valores introducidos al ArrayList como un prestamo 
+        prestamos.add(new Prestamo(noPrestamo, nombre, direccion, noTelefono, importe));
+        //Casteamos el ArrayList como un objeto de tipo Array para realizar la ordenacion 
+        Object []arreglo = prestamos.toArray();
+        //Realizamos un ordenamiento del arreglo con el algoritmo merge sort
         ordenacionMerge(arreglo);
-        articulos = new ArrayList(Arrays.asList(arreglo));
+        //Introducimos al ArrayList el arreglo con los datos ya ordenados
+        prestamos = new ArrayList(Arrays.asList(arreglo));
     }
     
     private Object[] ordenacionMerge(Object []arreglo){
         if(arreglo.length > 1) {
-            Object[] first = new Articulo[arreglo.length / 2];
-            Object[] second = new Articulo[arreglo.length - first.length];
+            Object[] first = new Prestamo[arreglo.length / 2];
+            Object[] second = new Prestamo[arreglo.length - first.length];
 
             System.arraycopy(arreglo, 0, first, 0, first.length);
             System.arraycopy(arreglo, first.length, second, 0, second.length);
@@ -79,7 +96,7 @@ public class Funcion {
         int iMerged = 0;
         
         while (iFirst < first.length  &&  iSecond < second.length) {
-          if ( ((Articulo)first[iFirst]).getCodigo() < ((Articulo)second[iSecond]).getCodigo()) {
+          if (((Prestamo)first[iFirst]).getNombre().compareTo(((Prestamo)second[iSecond]).getNombre()) < 0) {
                result[iMerged++] = first[iFirst];
                iFirst++;
           } else {
@@ -92,12 +109,13 @@ public class Funcion {
         System.arraycopy(second, iSecond, result, iMerged, second.length - iSecond);
     }
     
-    public void mostrarArticulos(){
-        for(Articulo a : articulos){
-            System.out.println(a);
+    public void consultaGeneral(){
+        for(Prestamo p : prestamos){
+            System.out.println(p);
         }
     }
     
+    /*
     private Articulo busquedaBinaria(int codigo, ArrayList <Articulo>articulos){
         int central;
         int bajo = 0;
