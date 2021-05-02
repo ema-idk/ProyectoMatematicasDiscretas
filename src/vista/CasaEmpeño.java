@@ -30,10 +30,10 @@ public class CasaEmpeño {
                 op = numero.nextInt();
                 switch(op){
                     case 1:
-                        //metodo.registrarPrestamo();
+                        metodo.realizarPrestamo();
                         break;
                     case 2: 
-                        //metodo.mostrarPrestamos();
+                        metodo.consultaGeneral();
                         break;
                     case 3:
                         //metodo.consultarNombre();
