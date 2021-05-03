@@ -43,27 +43,32 @@ public class Funcion {
         Scanner leerDouble = new Scanner(System.in);
         int noPrestamo;
         String nombre, direccion, noTelefono;
-        double importe;
-        //Hacemos una iteracion hasta validar que noPrestamo no este registrado 
-        do  {
-            System.out.print("Número de préstamo: ");
-            noPrestamo = leerInt.nextInt();
-        }   while(Funcion.this.existeNoPrestamo(noPrestamo));
-        //Introducimos los datos restantes
-        System.out.print("Nombre del cliente: ");
-        nombre = leerString.nextLine();
-        System.out.print("Dirección: ");
-        direccion = leerString.nextLine();
-        System.out.print("Teléfono: ");
-        noTelefono = leerString.nextLine();
-        System.out.print("Importe solicitado: ");
-        importe = leerDouble.nextDouble();
-        //Mandamos llamar la funcion que agrega al ArrayList el prestamo
-        Funcion.this.realizarPrestamo(noPrestamo, nombre, direccion, noTelefono, importe);
-        System.out.println("Préstamo registrado exitosamente!!");
+        int importe;
+        int ciclo;
+        do {
+            //Hacemos una iteracion hasta validar que noPrestamo no este registrado 
+            do  {
+                System.out.print("Número de préstamo: ");
+                noPrestamo = leerInt.nextInt();
+            }   while(Funcion.this.existeNoPrestamo(noPrestamo));
+            //Introducimos los datos restantes
+            System.out.print("Nombre del cliente: ");
+            nombre = leerString.nextLine();
+            System.out.print("Dirección: ");
+            direccion = leerString.nextLine();
+            System.out.print("Teléfono: ");
+            noTelefono = leerString.nextLine();
+            System.out.print("Importe solicitado: ");
+            importe = leerInt.nextInt();
+            //Mandamos llamar la funcion que agrega al ArrayList el prestamo
+            Funcion.this.realizarPrestamo(noPrestamo, nombre, direccion, noTelefono, importe);
+            System.out.println("Préstamo registrado exitosamente!!");
+            System.out.println("Quieres agregar otro registro? \n[1-Si / 2-No]");
+            ciclo = leerInt.nextInt();
+        } while(ciclo == 1);
     }
     
-    public void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, double importe){
+    public void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, int importe){
         //Agregamos los valores introducidos al ArrayList como un prestamo 
         prestamos.add(new Prestamo(noPrestamo, nombre, direccion, noTelefono, importe));
         //Casteamos el ArrayList como un objeto de tipo Array para realizar la ordenacion 
@@ -119,107 +124,86 @@ public class Funcion {
         }
     }
     
-    /*
-    private Articulo busquedaBinaria(int codigo, ArrayList <Articulo>articulos){
+    private Prestamo busquedaBinaria(int codigo, ArrayList<Prestamo> prestamos) {
         int central;
         int bajo = 0;
-        int alto = articulos.size() - 1;
-        while (bajo <= alto){
+        int alto = prestamos.size() - 1;
+        while (bajo <= alto) {
             central = (bajo + alto) / 2;
-            int valorCentral = articulos.get(central).getCodigo();
-            if (codigo == valorCentral)
-               return articulos.get(central);
-            else if (codigo < valorCentral)
-               alto = central -1;
-            else
-               bajo = central + 1;
+            int valorCentral = prestamos.get(central).getNoPrestamo();
+            if (codigo == valorCentral) {
+                return prestamos.get(central);
+            } else if (codigo < valorCentral) {
+                alto = central - 1;
+            } else {
+                bajo = central + 1;
+            }
         }
         return null;
     }
     
-    public void eliminarArticulo(){
+    public void consultarNoPrestamo() {
         Scanner leerInt = new Scanner(System.in);
         int codigo;
-        System.out.println("Codigo del articulo a eliminar: ");
+        System.out.println("\nNumero del Prestamo a buscar: ");
         System.out.print(">> ");
         codigo = leerInt.nextInt();
-        if(articulos.contains(busquedaBinaria(codigo, articulos))){
-            articulos.remove(busquedaBinaria(codigo, articulos));
-            System.out.println("Articulo eliminado exitosamente!");
-        }
-        else
-            System.out.println("Codigo no encontado!");
-    }
-    
-    public void consultarArticulo(){
-        Scanner leerInt = new Scanner(System.in);
-        int codigo;
-        System.out.println("Codigo del articulo a buscar: ");
-        System.out.print(">> ");
-        codigo = leerInt.nextInt();
-        if(articulos.contains(busquedaBinaria(codigo, articulos))){
+        if (prestamos.contains(busquedaBinaria(codigo, prestamos))) {
             System.out.println("");
-            System.out.println(busquedaBinaria(codigo, articulos));
+            System.out.println(busquedaBinaria(codigo, prestamos));
+        } else {
+            System.out.println("\nCodigo no encontrado!");
         }
-        else
-            System.out.println("Codigo no encontado!");        
     }
     
-    public void modificarArticulo(){
-        Scanner leerInt = new Scanner(System.in);
-        Scanner leerString = new Scanner(System.in);
-        Scanner leerDouble = new Scanner(System.in);
-        int codigo;
-        System.out.println("Codigo del articulo a modificar: ");
-        System.out.print(">> ");
-        codigo = leerInt.nextInt();
-        if(articulos.contains(busquedaBinaria(codigo, articulos))){
-            int op = 0;
-            boolean salir = false;
-            while(!salir){
-                System.out.println("Introduzca la opcion a modificar");
-                System.out.println("1.- Descripcion");
-                System.out.println("2.- Cantidad en inventario");
-                System.out.println("3.- Precio");
-                System.out.println("4.- Regresar al menu");
-                try{
-                    System.out.print(">> ");
-                    op = leerInt.nextInt();
-                    switch(op){
-                        case 1 :
-                            System.out.println("Descripcion nueva: ");
-                            System.out.print(">> ");
-                            String descripcion = leerString.nextLine();
-                            busquedaBinaria(codigo, articulos).setDescripcion(descripcion);
-                            System.out.println("Descripcion actualizada!");
-                            break;
-                        case 2 :
-                            System.out.println("Cantidad nueva: ");
-                            System.out.print(">> ");
-                            int cantidad = leerInt.nextInt();
-                            busquedaBinaria(codigo, articulos).setCantidad(cantidad);
-                            System.out.println("Cantidad en inventario actualizada!");
-                            break;
-                        case 3 :
-                            System.out.println("Nuevo precio: ");
-                            System.out.print(">> ");
-                            double precio = leerDouble.nextDouble();
-                            busquedaBinaria(codigo, articulos).setPrecio(precio);
-                            System.out.println("Precio actualizado!");
-                            break;
-                        case 4 :
-                            salir = true;
-                            break;
-                        default :
-                            System.out.println("Opción no valida");
-                    }
-                }catch(InputMismatchException e){
-                    System.out.println("debes insertar un numero");
-                    leerInt.next();
-                }
+    private Prestamo busquedaSecuencial(String nombre, ArrayList<Prestamo> prestamos) {
+        for (int n = 0; n < prestamos.size(); n++) {
+            if (prestamos.contains(nombre)) {
+                return prestamos.get(n);
             }
         }
-        else
-            System.out.println("Codigo no encontado!");     
-    }*/
+        
+        return null;
+    }
+    
+        public void consultarNombre() {
+        Scanner leerString = new Scanner(System.in);
+        String nomb;
+        System.out.println("\nNombre a buscar: ");
+        System.out.print(">> ");
+        nomb = leerString.nextLine();
+
+        if (prestamos.contains(busquedaSecuencial(nomb, prestamos))) {
+            System.out.println("");
+            System.out.println(busquedaSecuencial(nomb, prestamos));
+        } else {
+            System.out.println("Nombre no fue encontrado.");
+        }
+    }
+
+    public void mostrarImporte(int codigo, ArrayList<Prestamo> prestamos) {
+        Scanner leerInt = new Scanner(System.in);
+        int numPres;
+        System.out.println("Numero de Prestamo: ");
+        numPres = leerInt.nextInt();
+        int imp = 0;
+        int mes;
+        double total;
+
+        for (Prestamo pres : prestamos) {
+            //if (pres.getNoPrestamo() == numPres) {
+            if (prestamos.contains(busquedaBinaria(codigo, prestamos))) {
+                imp = pres.getImporte();
+            }
+        }
+
+        System.out.println("Cuantos meses de interes se requiere pagar?: ");
+        mes = leerInt.nextInt();
+
+        //Calcular el total a pagar
+        // multiplicar el monto inicial por la tasa de interés en porcentaje por los plazos de pago
+        total = imp * mes;
+
+        //return total;
+    }
 }

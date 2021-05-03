@@ -28,22 +28,27 @@ public class CasaEmpeño {
             try{
                 System.out.print(">> ");
                 op = numero.nextInt();
-                switch(op){
+                switch (op) {
                     case 1:
+                        System.out.println("\nREGISTRO");
                         metodo.realizarPrestamo();
                         break;
-                    case 2: 
+                    case 2:
+                        System.out.println("\nCONSULTA GENERAL");
                         metodo.consultaGeneral();
                         break;
                     case 3:
-                        //metodo.consultarNombre();
+                        System.out.println("\nCONSULTA POR NOMBRE");
+                        metodo.consultarNombre();
                         break;
                     case 4:
-                        //metodo.consultarNoPrestamo();
-                        break;   
+                        System.out.println("\nCONSULTA POR PRESTAMO");
+                        metodo.consultarNoPrestamo();
+                        break;
                     case 5:
+                        System.out.println("\nIMPORTE A PAGAR");
                         //metodo.mostrarImporte();
-                        break;                    
+                        break;
                     case 6:
                         salir = true;
                         break;
