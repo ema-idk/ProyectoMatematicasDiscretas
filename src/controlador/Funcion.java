@@ -68,7 +68,7 @@ public class Funcion {
         } while(ciclo == 1);
     }
     
-    public void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, int importe){
+    private void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, int importe){
         //Agregamos los valores introducidos al ArrayList como un prestamo 
         prestamos.add(new Prestamo(noPrestamo, nombre, direccion, noTelefono, importe));
         //Casteamos el ArrayList como un objeto de tipo Array para realizar la ordenacion 
@@ -127,7 +127,7 @@ public class Funcion {
     private Prestamo busquedaBinaria(int codigo, ArrayList<Prestamo> prestamos) {
         int central;
         int bajo = 0;
-        int alto = prestamos.size() - 1;
+        int alto = prestamos.size() -1;
         while (bajo <= alto) {
             central = (bajo + alto) / 2;
             int valorCentral = prestamos.get(central).getNoPrestamo();
@@ -149,61 +149,58 @@ public class Funcion {
         System.out.print(">> ");
         codigo = leerInt.nextInt();
         if (prestamos.contains(busquedaBinaria(codigo, prestamos))) {
-            System.out.println("");
             System.out.println(busquedaBinaria(codigo, prestamos));
         } else {
-            System.out.println("\nCodigo no encontrado!");
+            System.out.println("\nPrestamo no encontrado!");
         }
     }
     
     private Prestamo busquedaSecuencial(String nombre, ArrayList<Prestamo> prestamos) {
-        for (int n = 0; n < prestamos.size(); n++) {
-            if (prestamos.contains(nombre)) {
+        for (int n = 0; n < prestamos.size() ; n++) {
+            if (prestamos.get(n).getNombre().equals(nombre)) {
                 return prestamos.get(n);
             }
         }
-        
         return null;
     }
     
         public void consultarNombre() {
         Scanner leerString = new Scanner(System.in);
-        String nomb;
+        String nombre;
         System.out.println("\nNombre a buscar: ");
         System.out.print(">> ");
-        nomb = leerString.nextLine();
-
-        if (prestamos.contains(busquedaSecuencial(nomb, prestamos))) {
-            System.out.println("");
-            System.out.println(busquedaSecuencial(nomb, prestamos));
+        nombre = leerString.nextLine();
+        if (prestamos.contains(busquedaSecuencial(nombre, prestamos))) {
+            System.out.println(busquedaSecuencial(nombre, prestamos));
         } else {
             System.out.println("Nombre no fue encontrado.");
         }
     }
 
-    public void mostrarImporte(int codigo, ArrayList<Prestamo> prestamos) {
-        Scanner leerInt = new Scanner(System.in);
-        int numPres;
-        System.out.println("Numero de Prestamo: ");
-        numPres = leerInt.nextInt();
-        int imp = 0;
-        int mes;
-        double total;
-
-        for (Prestamo pres : prestamos) {
-            //if (pres.getNoPrestamo() == numPres) {
-            if (prestamos.contains(busquedaBinaria(codigo, prestamos))) {
-                imp = pres.getImporte();
-            }
+    private double calcularImporte(int n_meses, double importe, double interes) {
+        if(n_meses == 1) {
+           importe = importe + (importe * interes);
+           return importe;
         }
-
-        System.out.println("Cuantos meses de interes se requiere pagar?: ");
-        mes = leerInt.nextInt();
-
-        //Calcular el total a pagar
-        // multiplicar el monto inicial por la tasa de interés en porcentaje por los plazos de pago
-        total = imp * mes;
-
-        //return total;
+        else
+           importe = importe + (importe * interes);
+           return calcularImporte(n_meses - 1, importe, interes);
+    }
+        
+    public void mostrarImporte() {
+        Scanner leerInt = new Scanner(System.in);
+        int noPrestamo;
+        System.out.println("Número de préstamo: ");
+        noPrestamo = leerInt.nextInt();
+        if (prestamos.contains(busquedaBinaria(noPrestamo, prestamos))) {
+            int importe = busquedaBinaria(noPrestamo, prestamos).getImporte();
+            System.out.println("Cantidad de meses a pagar: ");
+            int n_meses = leerInt.nextInt();
+            double interes = 0.10;
+            double importePagar = calcularImporte(n_meses, importe, interes);
+            System.out.println("Importe a pagar: " + importePagar);
+        } else {
+            System.out.println("\nPrestamo no encontrado!");
+        }
     }
 }

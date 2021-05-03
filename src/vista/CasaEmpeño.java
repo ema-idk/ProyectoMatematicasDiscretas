@@ -47,7 +47,7 @@ public class CasaEmpeño {
                         break;
                     case 5:
                         System.out.println("\nIMPORTE A PAGAR");
-                        //metodo.mostrarImporte();
+                        metodo.mostrarImporte();
                         break;
                     case 6:
                         salir = true;
