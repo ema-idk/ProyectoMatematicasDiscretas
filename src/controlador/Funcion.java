@@ -8,6 +8,8 @@ import modelo.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 /**
  *
@@ -50,7 +52,7 @@ public class Funcion {
             do  {
                 System.out.print("Número de préstamo: ");
                 noPrestamo = leerInt.nextInt();
-            }   while(Funcion.this.existeNoPrestamo(noPrestamo));
+            }   while(existeNoPrestamo(noPrestamo));
             //Introducimos los datos restantes
             System.out.print("Nombre del cliente: ");
             nombre = leerString.nextLine();
@@ -61,23 +63,25 @@ public class Funcion {
             System.out.print("Importe solicitado: ");
             importe = leerInt.nextInt();
             //Mandamos llamar la funcion que agrega al ArrayList el prestamo
-            Funcion.this.realizarPrestamo(noPrestamo, nombre, direccion, noTelefono, importe);
+            realizarPrestamo(noPrestamo, nombre, direccion, noTelefono, importe);
             System.out.println("Préstamo registrado exitosamente!!");
-            System.out.println("Quieres agregar otro registro? \n[1-Si / 2-No]");
+            System.out.println("Quieres agregar otro registro? \n[1-Si / 2-No]: ");
             ciclo = leerInt.nextInt();
         } while(ciclo == 1);
     }
     
     private void realizarPrestamo(int noPrestamo, String nombre, String direccion, String noTelefono, int importe){
         //Agregamos los valores introducidos al ArrayList como un prestamo 
-        prestamos.add(new Prestamo(noPrestamo, nombre, direccion, noTelefono, importe));
+        prestamos.add(new Prestamo(noPrestamo, nombre, direccion, noTelefono, importe)); 
         //Casteamos el ArrayList como un objeto de tipo Array para realizar la ordenacion 
         Object []arreglo = prestamos.toArray();
         //Realizamos un ordenamiento del arreglo con el algoritmo merge sort
         ordenacionMerge(arreglo);
         //Introducimos al ArrayList el arreglo con los datos ya ordenados
         prestamos = new ArrayList(Arrays.asList(arreglo));
+       
     }
+    
     
     private Object[] ordenacionMerge(Object []arreglo){
         //Si el arreglo es mayor a 1, entonces realizamos el ordenamiento
@@ -91,7 +95,7 @@ public class Funcion {
             //De manera recursiva el arreglo se ira ordenando, aplicandolo a cada mitad
             ordenacionMerge(first);
             ordenacionMerge(second);
-            //Juntamos los resultados y ordenamos  
+            //Juntamos los resultados y ordenamos
             merge(first, second, arreglo);
         }
         //Regresamos el arreglo ya ordenado
@@ -102,9 +106,9 @@ public class Funcion {
         int iFirst = 0;
         int iSecond = 0;
         int iMerged = 0;
-        //Comparamos lexicograficamente el valor de una cadena con otra de las mitades del arreglo
+        //Comparamos lexicograficamente el valor de una con otra de las mitades del arreglo
         while (iFirst < first.length  &&  iSecond < second.length) {
-          if (((Prestamo)first[iFirst]).getNombre().compareTo(((Prestamo)second[iSecond]).getNombre()) < 0) {
+          if (((Prestamo)first[iFirst]).getNoPrestamo() < ((Prestamo)second[iSecond]).getNoPrestamo()) {
                result[iMerged++] = first[iFirst];
                iFirst++;
           } else {
@@ -118,22 +122,28 @@ public class Funcion {
     }
     
     public void consultaGeneral(){
-        //Mostramos cada uno de los elementos que se encuetran dentro del ArrayList prestamos
-        for(Prestamo p : prestamos){
+        ArrayList<Prestamo> prestamos2 = (ArrayList<Prestamo>) prestamos.clone();
+        Collections.sort(prestamos2, new Comparator<Prestamo>() {
+            @Override
+            public int compare(Prestamo p1, Prestamo p2) {
+                return p1.getNombre().compareTo(p2.getNombre() );
+            }
+        });
+        for(Prestamo p : prestamos2){
             System.out.println(p);
         }
     }
     
-    private Prestamo busquedaBinaria(int codigo, ArrayList<Prestamo> prestamos) {
+    private Prestamo busquedaBinaria(int noPrestamo, ArrayList<Prestamo> prestamos) {
         int central;
         int bajo = 0;
-        int alto = prestamos.size() -1;
+        int alto = prestamos.size() - 1;
         while (bajo <= alto) {
             central = (bajo + alto) / 2;
             int valorCentral = prestamos.get(central).getNoPrestamo();
-            if (codigo == valorCentral) {
+            if (noPrestamo == valorCentral) {
                 return prestamos.get(central);
-            } else if (codigo < valorCentral) {
+            } else if (noPrestamo < valorCentral) {
                 alto = central - 1;
             } else {
                 bajo = central + 1;
@@ -144,14 +154,14 @@ public class Funcion {
     
     public void consultarNoPrestamo() {
         Scanner leerInt = new Scanner(System.in);
-        int codigo;
-        System.out.println("\nNumero del Prestamo a buscar: ");
+        int noPrestamo;
+        System.out.println("\nNúmero del préstamo a buscar: ");
         System.out.print(">> ");
-        codigo = leerInt.nextInt();
-        if (prestamos.contains(busquedaBinaria(codigo, prestamos))) {
-            System.out.println(busquedaBinaria(codigo, prestamos));
+        noPrestamo = leerInt.nextInt();
+        if (prestamos.contains(busquedaBinaria(noPrestamo, prestamos))) {
+            System.out.println(busquedaBinaria(noPrestamo, prestamos));
         } else {
-            System.out.println("\nPrestamo no encontrado!");
+            System.out.println("\nPrestamo no encontrado");
         }
     }
     
@@ -173,7 +183,7 @@ public class Funcion {
         if (prestamos.contains(busquedaSecuencial(nombre, prestamos))) {
             System.out.println(busquedaSecuencial(nombre, prestamos));
         } else {
-            System.out.println("Nombre no fue encontrado.");
+            System.out.println("\nPrestamo no encontrado");
         }
     }
 
@@ -200,7 +210,7 @@ public class Funcion {
             double importePagar = calcularImporte(n_meses, importe, interes);
             System.out.println("Importe a pagar: " + importePagar);
         } else {
-            System.out.println("\nPrestamo no encontrado!");
+            System.out.println("\nPréstamo no encontrado");
         }
     }
 }
