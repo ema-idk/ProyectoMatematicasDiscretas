@@ -75,18 +75,21 @@ public class Funcion {
     }
     
     private Object[] ordenacionMerge(Object []arreglo){
+        //Si el arreglo es mayor a 1, entonces realizamos el ordenamiento
         if(arreglo.length > 1) {
+            //El arreglo se divide en 2 mitades de similar longitud
             Object[] first = new Prestamo[arreglo.length / 2];
             Object[] second = new Prestamo[arreglo.length - first.length];
-
+            //Se traslada el valor del un elemento del arreglo a otra posicion dentro de otro arreglo
             System.arraycopy(arreglo, 0, first, 0, first.length);
             System.arraycopy(arreglo, first.length, second, 0, second.length);
-
+            //De manera recursiva el arreglo se ira ordenando, aplicandolo a cada mitad
             ordenacionMerge(first);
             ordenacionMerge(second);
-          
+            //Juntamos los resultados y ordenamos  
             merge(first, second, arreglo);
         }
+        //Regresamos el arreglo ya ordenado
         return arreglo;
     }
     
@@ -94,7 +97,7 @@ public class Funcion {
         int iFirst = 0;
         int iSecond = 0;
         int iMerged = 0;
-        
+        //Comparamos lexicograficamente el valor de una cadena con otra de las mitades del arreglo
         while (iFirst < first.length  &&  iSecond < second.length) {
           if (((Prestamo)first[iFirst]).getNombre().compareTo(((Prestamo)second[iSecond]).getNombre()) < 0) {
                result[iMerged++] = first[iFirst];
@@ -104,12 +107,13 @@ public class Funcion {
                iSecond++;
           }
         }
-        
+        //Reacomodamos los valores dentro del arreglo para que esten ordenados
         System.arraycopy(first, iFirst, result, iMerged, first.length - iFirst);
         System.arraycopy(second, iSecond, result, iMerged, second.length - iSecond);
     }
     
     public void consultaGeneral(){
+        //Mostramos cada uno de los elementos que se encuetran dentro del ArrayList prestamos
         for(Prestamo p : prestamos){
             System.out.println(p);
         }
